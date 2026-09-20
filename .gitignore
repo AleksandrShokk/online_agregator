@@ -1,0 +1,17 @@
+node_modules
+dist
+.output
+.expo
+.next
+.env
+.env.*
+!.env.example
+*.log   
+.DS_Store
+
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
