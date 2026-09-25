@@ -1,26 +1,15 @@
 import { colors } from '@app/tokens/src/colors'
 import { space } from '@app/tokens/src/layout'
 import { fontSize } from '@app/tokens/src/typography'
-import { Link } from 'expo-router'
-import { StyleSheet, Text } from 'react-native'
-
-import { MEDIA_TYPES } from '@app/types'
+import { StyleSheet } from 'react-native'
 
 import { Screen } from '@/components/Screen'
+import { ScreenTitle } from '@/components/ScreenTitle'
 
 export default function Library() {
   return (
     <Screen>
-      <Text>Library</Text>
-      {MEDIA_TYPES.map(type => (
-        <Link
-          key={type}
-          href={`/title/${type}/1`}
-          style={styles.item}
-        >
-          <Text>{type}</Text>
-        </Link>
-      ))}
+      <ScreenTitle>Library</ScreenTitle>
     </Screen>
   )
 }

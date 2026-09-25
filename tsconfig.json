@@ -1,3 +1,3 @@
 {
-    "extends": "./tsconfig.base.json", "include": ["packages/*/src"]
+    "extends": "./tsconfig.base.json", "include": ["packages/*/src", "packages/api/orval.config.ts"]
 }
