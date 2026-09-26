@@ -1,11 +1,8 @@
-import { Play } from 'lucide-react-native'
-import { ScrollView, StyleSheet, View } from 'react-native'
-
 import type { TitleListItemResponse } from '@app/api'
 
-import { Button } from '@/components/Button'
 import { HomeHeader } from '@/components/HomeHeader'
-import { Screen } from '@/components/Screen'
+import { HomeHeroSlider } from '@/components/home/HomeHeroSlider'
+import { SectionCarousel } from '@/components/section-carousel/SectionCarousel'
 import { TitleCard } from '@/components/title-card/TitleCard'
 
 export const SAMPLE_TITLES: TitleListItemResponse[] = [
@@ -66,33 +63,28 @@ export const SAMPLE_TITLES: TitleListItemResponse[] = [
 
 export default function Index() {
   return (
-    <Screen>
+    <>
       <HomeHeader />
-      <View
-        style={{
-          marginTop: 80
-        }}
-      >
-        <Button
-          icon={Play}
-          onPress={() => {}}
-        >
-          Watch
-        </Button>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          {SAMPLE_TITLES.map(title => (
-            <TitleCard
-              onPress={() => {}}
-              title={title}
-              key={title.id}
-            />
-          ))}
-        </ScrollView>
-      </View>
-    </Screen>
+
+      <HomeHeroSlider items={SAMPLE_TITLES} />
+      <SectionCarousel title='Top pics for you'>
+        {SAMPLE_TITLES.map(title => (
+          <TitleCard
+            onPress={() => {}}
+            title={title}
+            key={title.id}
+          />
+        ))}
+      </SectionCarousel>
+      <SectionCarousel title='Popular now'>
+        {SAMPLE_TITLES.map(title => (
+          <TitleCard
+            onPress={() => {}}
+            title={title}
+            key={title.id}
+          />
+        ))}
+      </SectionCarousel>
+    </>
   )
 }
-const styles = StyleSheet.create({})
