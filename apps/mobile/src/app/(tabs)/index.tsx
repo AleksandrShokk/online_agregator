@@ -1,6 +1,14 @@
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue
+} from 'react-native-reanimated'
+
+import { space } from '@app/tokens'
+
 import type { TitleListItemResponse } from '@app/api'
 
 import { HomeHeader } from '@/components/HomeHeader'
+import { Screen } from '@/components/Screen'
 import { HomeHeroSlider } from '@/components/home/HomeHeroSlider'
 import { SectionCarousel } from '@/components/section-carousel/SectionCarousel'
 import { TitleCard } from '@/components/title-card/TitleCard'
@@ -62,29 +70,45 @@ export const SAMPLE_TITLES: TitleListItemResponse[] = [
 ]
 
 export default function Index() {
+  const scrollY = useSharedValue(0)
+  const scrollHandler = useAnimatedScrollHandler(e => {
+    scrollY.set(e.contentOffset.y)
+  })
   return (
-    <>
-      <HomeHeader />
-
-      <HomeHeroSlider items={SAMPLE_TITLES} />
-      <SectionCarousel title='Top pics for you'>
-        {SAMPLE_TITLES.map(title => (
-          <TitleCard
-            onPress={() => {}}
-            title={title}
-            key={title.id}
-          />
-        ))}
-      </SectionCarousel>
-      <SectionCarousel title='Popular now'>
-        {SAMPLE_TITLES.map(title => (
-          <TitleCard
-            onPress={() => {}}
-            title={title}
-            key={title.id}
-          />
-        ))}
-      </SectionCarousel>
-    </>
+    <Screen edges={[]}>
+      <HomeHeader scrollY={scrollY} />
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: space[28] }}
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
+      >
+        <HomeHeroSlider items={SAMPLE_TITLES} />
+        <SectionCarousel
+          title='Top pics for you'
+          onPressArrow={() => {}}
+        >
+          {SAMPLE_TITLES.map(title => (
+            <TitleCard
+              onPress={() => {}}
+              title={title}
+              key={title.id}
+            />
+          ))}
+        </SectionCarousel>
+        <SectionCarousel
+          title='Popular now'
+          onPressArrow={() => {}}
+        >
+          {SAMPLE_TITLES.map(title => (
+            <TitleCard
+              onPress={() => {}}
+              title={title}
+              key={title.id}
+            />
+          ))}
+        </SectionCarousel>
+      </Animated.ScrollView>
+    </Screen>
   )
 }

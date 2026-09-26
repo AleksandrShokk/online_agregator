@@ -1,18 +1,19 @@
 import type { ReactNode } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { colors } from '@app/tokens'
 
 interface Props {
   children: ReactNode
-  edges?: 'top' | 'bottom'
+  edges?: ('top' | 'bottom')[]
 }
-export function Screen({ children, edges = 'top' }: Props) {
+export function Screen({ children, edges = ['top'] }: Props) {
+  if (edges.length === 0) return <View style={styles.root}>{children}</View>
   return (
     <SafeAreaView
       style={styles.root}
-      edges={[edges]}
+      edges={edges}
     >
       {children}
     </SafeAreaView>

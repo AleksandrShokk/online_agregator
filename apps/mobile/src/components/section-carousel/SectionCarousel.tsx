@@ -21,7 +21,7 @@ export function SectionCarousel({ children, title, onPressArrow }: Props) {
         <Text style={styles.title}>{title}</Text>
         {!!onPressArrow && (
           <ChevronRight
-            size={22}
+            size={26}
             color={colors.text.primary}
           />
         )}
@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: space['layout-horizontal']
+    paddingHorizontal: space['layout-horizontal'],
+    marginBottom: space[2]
   },
   title: {
     color: colors.text.primary,

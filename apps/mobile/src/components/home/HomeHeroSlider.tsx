@@ -27,7 +27,7 @@ export function HomeHeroSlider({ items }: Props) {
   const { width } = useWindowDimensions()
   const [index, setIndex] = useState(0)
 
-  const height = width * 1.35
+  const height = width * 1.4
   const current = items[index]
 
   const scrollX = useSharedValue(0)
@@ -58,6 +58,7 @@ export function HomeHeroSlider({ items }: Props) {
             item={item}
             index={index}
             width={width}
+            height={height}
             scrollX={scrollX}
           />
         ))}
@@ -65,7 +66,7 @@ export function HomeHeroSlider({ items }: Props) {
 
       <LinearGradient
         colors={[
-          'rgba(2,0,3,0.7)',
+          'rgba(2,0,3,0.6)',
           'transparent',
           'rgba(2,0,3,0.9)',
           colors.bg.base
@@ -83,7 +84,7 @@ export function HomeHeroSlider({ items }: Props) {
           key={current?.id}
           entering={FadeIn.duration(400)}
           exiting={FadeOut.duration(200)}
-          style={{ gap: space[2] }}
+          style={{ gap: space[2], pointerEvents: 'none' }}
         >
           <Text
             style={styles.name}
@@ -102,7 +103,10 @@ export function HomeHeroSlider({ items }: Props) {
           </Text>
         </Animated.View>
 
-        <View style={styles.bottom}>
+        <View
+          style={styles.bottom}
+          pointerEvents='box-none'
+        >
           <View style={styles.actions}>
             <Button
               icon={Play}
