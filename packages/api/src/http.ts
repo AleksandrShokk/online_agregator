@@ -1,12 +1,18 @@
 let getToken: () => Promise<string | null> = async () => null
+let onRefresh: (() => Promise<boolean>)|null = null
+let onUnautorized: (()=> void)|null = null
 let baseUrl = ''
 
 export const configureApi = (options: {
     baseUrl: string
     getToken: () => Promise<string | null>
+    onRefresh?: () => Promise<boolean>,
+    onUnautorized?: () => void
 }) => {
     baseUrl = options.baseUrl
     getToken = options.getToken
+    onRefresh = options.onRefresh ?? null
+    onUnautorized = options.onUnautorized ?? null
 }
 export class ApiError extends Error {
     constructor(public status: number, public messages: string[]) {
@@ -14,23 +20,44 @@ export class ApiError extends Error {
     }
 }
 
-export const http = async<T>(url: string, init?: RequestInit): Promise<T> => {
+let refreshPromise: Promise<boolean> | null = null
+const request = async(url: string, init?: RequestInit) =>{
     const token = getToken()
 
-    const response = await fetch(`${baseUrl}${url}`, {
+    return await fetch(`${baseUrl}${url}`, {
         ...init,
         headers:{ 
             ...(init?.headers || {}),
             ...(token ? {Authorization:  `Bearer ${await token}`} : {}),  
         }
     })
+}
+export const http = async<T>(url: string, init?: RequestInit): Promise<T> => {
+    if (!baseUrl) {
+        throw new Error('No BaseURL')
+    }
+
+    let response = await request(url, init)
+
+    if (response.status === 401 && onRefresh && !url.includes('auth')) {
+        if(!refreshPromise) {
+            refreshPromise = onRefresh().finally(() => {
+                refreshPromise = null
+            })
+        }
+        const isRefreshed = await refreshPromise
+        if (isRefreshed) {
+                response = await request(url, init)
+                
+        } else{
+                onUnautorized?.()
+            }
+    }
     if (!response.ok){
         const body = await response.json().catch(() => null)    
         const raw = body?.message ?? response.statusText
-        throw new ApiError(response.status, Array.isArray(raw) ? raw : [raw])
+        throw new ApiError(response.status, Array.isArray   (raw) ? raw : [raw])
     }
-    if (response.status === 204){
-        return undefined as T
-    }
-    return response.json()
+    const data =response.status === 204 ? undefined : await response.json()
+    return {data, status: response.status, headers: response.headers} as T
 }

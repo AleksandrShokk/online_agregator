@@ -14,7 +14,7 @@ import { colors, fontSize, fontWeight, space } from '@app/tokens'
 
 import type { TitleListItemResponse } from '@app/api'
 
-import { Button } from '../Button'
+import { Button } from '../ui/Button'
 
 import { HomeHeroSlide } from './HomeHeroSlide'
 import { PaginationDot } from './PaginationDot'

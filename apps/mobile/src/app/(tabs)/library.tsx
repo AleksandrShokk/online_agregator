@@ -3,8 +3,8 @@ import { space } from '@app/tokens/src/layout'
 import { fontSize } from '@app/tokens/src/typography'
 import { StyleSheet } from 'react-native'
 
-import { Screen } from '@/components/Screen'
-import { ScreenTitle } from '@/components/ScreenTitle'
+import { Screen } from '@/components/ui/Screen'
+import { ScreenTitle } from '@/components/ui/ScreenTitle'
 
 export default function Library() {
   return (

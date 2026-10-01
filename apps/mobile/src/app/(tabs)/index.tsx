@@ -7,11 +7,11 @@ import { space } from '@app/tokens'
 
 import type { TitleListItemResponse } from '@app/api'
 
-import { HomeHeader } from '@/components/HomeHeader'
-import { Screen } from '@/components/Screen'
+import { HomeHeader } from '@/components/home/HomeHeader'
 import { HomeHeroSlider } from '@/components/home/HomeHeroSlider'
 import { SectionCarousel } from '@/components/section-carousel/SectionCarousel'
 import { TitleCard } from '@/components/title-card/TitleCard'
+import { Screen } from '@/components/ui/Screen'
 
 export const SAMPLE_TITLES: TitleListItemResponse[] = [
   {

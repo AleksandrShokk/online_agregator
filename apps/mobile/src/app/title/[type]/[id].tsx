@@ -2,8 +2,8 @@ import { router, useLocalSearchParams } from 'expo-router'
 import { ChevronLeft } from 'lucide-react-native'
 import { Text, View } from 'react-native'
 
-import { FloatingButton } from '@/components/FloatingButton'
-import { Screen } from '@/components/Screen'
+import { FloatingButton } from '@/components/ui/FloatingButton'
+import { Screen } from '@/components/ui/Screen'
 
 export default function TitleDetail() {
   const { id, type } = useLocalSearchParams<{ id: string; type: string }>()

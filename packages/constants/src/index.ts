@@ -15,3 +15,6 @@ export const TYPE_LABELS: Record<TitleListItemResponseType, string> = {
   BOOK: 'Book',
   ANIME: 'Anime'
 }
+export const ACCESS_TOKEN = 'accessToken'
+export const REFRESH_TOKEN = 'refreshToken'
+export * from './auth-fotm'
