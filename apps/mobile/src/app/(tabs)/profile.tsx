@@ -1,26 +1,29 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { router } from 'expo-router'
-import { StyleSheet, Text, View } from 'react-native'
+import { Redirect, router } from 'expo-router'
+import { LogOut } from 'lucide-react-native'
+import { ScrollView } from 'react-native'
 
-import { colors } from '@app/tokens'
+import { space } from '@app/tokens'
 
 import { useAuthMobileLogout, useUserFindMe } from '@app/api'
 
-import { Button } from '@/components/ui/Button'
+import { ProfileHeader } from '@/components/profile/ProfileHeader'
+import { ProfileMenuItem } from '@/components/profile/ProfileMenuItem'
+import { PROFILE_MENU } from '@/components/profile/profile-menu.data'
 import { Screen } from '@/components/ui/Screen'
 
 import { clearTokens, getRefreshToken } from '@/lib/token'
 
 export default function Profile() {
   const queryClient = useQueryClient()
-  const { data } = useUserFindMe()
+  const { data, isPending: isLoading, isError } = useUserFindMe()
 
   const { mutate: logout, isPending } = useAuthMobileLogout({
     mutation: {
       onSettled: async () => {
         await clearTokens()
         queryClient.clear()
-        router.replace('/register')
+        router.replace('/login')
       }
     }
   })
@@ -29,24 +32,34 @@ export default function Profile() {
     if (!refreshToken) return
     logout({ data: { refreshToken } })
   }
+  if (isLoading) return <Screen />
 
+  if (isError || !data) return <Redirect href='/login' />
   return (
-    <Screen>
-      <View>
-        <Text style={styles.root}>{data?.data.email}</Text>
-        <Button
-          variant='secondary'
+    <Screen edges={[]}>
+      <ProfileHeader
+        name={data?.data.username || ''}
+        avatarUrl={data?.data.profile?.avatarUrl || ''}
+      />
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ paddingHorizontal: space['layout-horizontal'] }}
+      >
+        {PROFILE_MENU.map((item, index) => (
+          <ProfileMenuItem
+            {...item}
+            key={item.label}
+            isLast={index === PROFILE_MENU.length - 1}
+          />
+        ))}
+        <ProfileMenuItem
+          icon={LogOut}
+          label={isPending ? 'Logging out' : 'Logout'}
           onPress={handleLogout}
-          isDisabled={isPending}
-        >
-          Log out
-        </Button>
-      </View>
+          isLast
+        />
+      </ScrollView>
     </Screen>
   )
 }
-const styles = StyleSheet.create({
-  root: {
-    color: colors.text.primary
-  }
-})

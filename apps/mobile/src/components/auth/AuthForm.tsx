@@ -9,8 +9,6 @@ import { colors, fontSize, fontWeight, space } from '@app/tokens'
 
 import { type TAuthForm, authSchema } from '@app/schemas'
 
-import { ApiError } from '@app/api'
-
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
 import { Screen } from '../ui/Screen'
@@ -62,7 +60,7 @@ export function AuthForm({ error, isPending, onSubmit, type }: Props) {
           )}
         />
 
-        {error instanceof ApiError && (
+        {error instanceof Error && (
           <Text style={styles.error}>{error.message}</Text>
         )}
         <Button

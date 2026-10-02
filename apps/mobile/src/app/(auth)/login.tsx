@@ -16,7 +16,7 @@ export default function Login() {
       onSuccess: async ({ data: { accessToken, refreshToken } }) => {
         await saveTokens(accessToken, refreshToken)
         queryClient.clear()
-        router.replace('/')
+        router.replace('/profile')
       }
     }
   })
