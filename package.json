@@ -12,7 +12,7 @@
     "web": "pnpm --filter web",
     "ext": "pnpm --filter ext",
     "ts-check": "pnpm -r exec tsc --noEmit",
-    "back:dev": "cd ../red-marathon-back-end-version_1 && pnpm start:dev"
+    "back:dev": "cd ../red-marathon-back-end-version_4 && pnpm start:dev"
   },
   "keywords": [],
   "author": "",

@@ -2,7 +2,6 @@ import { configureApi } from "@app/api";
 
 import * as SecureStore from 'expo-secure-store'
 import { clearTokens, getRefreshToken, saveTokens } from "./token";
-import { router } from "expo-router";
 import { authTokenSchema } from "@app/schemas";
 
 configureApi({
@@ -10,7 +9,6 @@ configureApi({
     getToken: () => SecureStore.getItemAsync('accessToken'),
     onUnautorized: async () => {
         await clearTokens()
-        router.replace('/login')
     },
     onRefresh: async () => {
         const refreshToken = await getRefreshToken()

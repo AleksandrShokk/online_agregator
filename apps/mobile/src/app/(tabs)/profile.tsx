@@ -10,6 +10,7 @@ import { useAuthMobileLogout, useUserFindMe } from '@app/api'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { ProfileMenuItem } from '@/components/profile/ProfileMenuItem'
 import { PROFILE_MENU } from '@/components/profile/profile-menu.data'
+import { LoaderAnimate } from '@/components/ui/LoaderAnimate'
 import { Screen } from '@/components/ui/Screen'
 
 import { clearTokens, getRefreshToken } from '@/lib/token'
@@ -32,7 +33,12 @@ export default function Profile() {
     if (!refreshToken) return
     logout({ data: { refreshToken } })
   }
-  if (isLoading) return <Screen />
+  if (isLoading)
+    return (
+      <Screen>
+        <LoaderAnimate />
+      </Screen>
+    )
 
   if (isError || !data) return <Redirect href='/login' />
   return (

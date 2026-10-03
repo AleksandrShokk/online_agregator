@@ -1,3 +1,4 @@
+import { router } from 'expo-router'
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue
@@ -5,75 +6,35 @@ import Animated, {
 
 import { space } from '@app/tokens'
 
-import type { TitleListItemResponse } from '@app/api'
+import { useDiscoverGetTrending } from '@app/api'
 
 import { HomeHeader } from '@/components/home/HomeHeader'
 import { HomeHeroSlider } from '@/components/home/HomeHeroSlider'
 import { SectionCarousel } from '@/components/section-carousel/SectionCarousel'
 import { TitleCard } from '@/components/title-card/TitleCard'
+import { LoaderAnimate } from '@/components/ui/LoaderAnimate'
 import { Screen } from '@/components/ui/Screen'
-
-export const SAMPLE_TITLES: TitleListItemResponse[] = [
-  {
-    id: 'clx1',
-    type: 'MOVIE',
-    name: 'Dune: Part Two',
-    slug: 'dune-part-two',
-    coverUrl: 'https://poster4.me/wp-content/uploads/2021/10/dyuna_10.jpg',
-    releaseDate: '2024-03-01T00:00:00.000Z',
-    rating: 8.4,
-    ratingCount: 1200
-  },
-  {
-    id: 'clx2',
-    type: 'TV_SHOW',
-    name: 'Severance',
-    slug: 'severance',
-    coverUrl:
-      'https://www.cinematerial.com/p/500x/1k35swfb/severance-movie-poster.jpg',
-    releaseDate: '2022-02-18T00:00:00.000Z',
-    rating: 8.7,
-    ratingCount: 2100
-  },
-  {
-    id: 'clx3',
-    type: 'ANIME',
-    name: "Frieren: Beyond Journey's End",
-    slug: 'frieren',
-    coverUrl:
-      'https://m.media-amazon.com/images/I/71SZgjz10wL._AC_UF1000,1000_QL80_.jpg',
-    releaseDate: '2023-09-29T00:00:00.000Z',
-    rating: 9.3,
-    ratingCount: 1800
-  },
-  {
-    id: 'clx4',
-    type: 'BOOK',
-    name: 'Project Hail Mary',
-    slug: 'project-hail-mary',
-    coverUrl:
-      'https://m.media-amazon.com/images/I/81WXoyRUc+L._AC_UF1000,1000_QL80_.jpg',
-    releaseDate: '2021-05-04T00:00:00.000Z',
-    rating: 8.9,
-    ratingCount: 760
-  },
-  {
-    id: 'clx5',
-    type: 'GAME',
-    name: "Baldur's Gate 3",
-    slug: 'baldurs-gate-3',
-    coverUrl: 'https://m.media-amazon.com/images/I/71T9Nc8x-3L.jpg',
-    releaseDate: '2023-08-03T00:00:00.000Z',
-    rating: 9.6,
-    ratingCount: 8900
-  }
-]
 
 export default function Index() {
   const scrollY = useSharedValue(0)
+  const { data, isPending } = useDiscoverGetTrending()
   const scrollHandler = useAnimatedScrollHandler(e => {
     scrollY.set(e.contentOffset.y)
   })
+
+  const items = data?.data ?? []
+  const heroItems = items.slice(0, 5)
+  const trendingItems = items.slice(12, 20)
+  const topPiksForYou = items.slice(5, 12)
+
+  if (isPending)
+    return (
+      <Screen edges={[]}>
+        <HomeHeader scrollY={scrollY} />
+        <LoaderAnimate />
+      </Screen>
+    )
+
   return (
     <Screen edges={[]}>
       <HomeHeader scrollY={scrollY} />
@@ -83,16 +44,18 @@ export default function Index() {
         onScroll={scrollHandler}
         scrollEventThrottle={16}
       >
-        <HomeHeroSlider items={SAMPLE_TITLES} />
+        {!!heroItems.length && <HomeHeroSlider items={heroItems} />}
         <SectionCarousel
           title='Top pics for you'
           onPressArrow={() => {}}
         >
-          {SAMPLE_TITLES.map(title => (
+          {topPiksForYou.map(title => (
             <TitleCard
-              onPress={() => {}}
+              onPress={() => {
+                router.push(`/title/${title.key}`)
+              }}
               title={title}
-              key={title.id}
+              key={title.key}
             />
           ))}
         </SectionCarousel>
@@ -100,11 +63,13 @@ export default function Index() {
           title='Popular now'
           onPressArrow={() => {}}
         >
-          {SAMPLE_TITLES.map(title => (
+          {trendingItems.map(title => (
             <TitleCard
-              onPress={() => {}}
+              onPress={() => {
+                router.push(`/title/${title.key}`)
+              }}
               title={title}
-              key={title.id}
+              key={title.key}
             />
           ))}
         </SectionCarousel>

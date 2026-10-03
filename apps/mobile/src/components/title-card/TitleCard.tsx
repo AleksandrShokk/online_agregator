@@ -10,14 +10,14 @@ import Animated, {
 
 import { colors, radius, space } from '@app/tokens'
 
-import type { TitleListItemResponse } from '@app/api'
+import type { DiscoverItemResponse } from '@app/api'
 
 import { CARD_CONFIG } from './config'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 interface Props {
-  title: TitleListItemResponse
+  title: Pick<DiscoverItemResponse, 'coverUrl' | 'type'>
   onPress: () => void
 }
 
